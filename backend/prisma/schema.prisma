@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  timezone  String   @default("Asia/Kolkata")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  eventTypes            EventType[]
+  availabilitySchedules AvailabilitySchedule[]
+
+  @@map("users")
+}
+
+model EventType {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  name            String
+  slug            String   @unique
+  durationMinutes Int      @map("duration_minutes")
+  description     String?
+  color           String   @default("#006BFF")
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookings Booking[]
+
+  @@map("event_types")
+}
+
+model AvailabilitySchedule {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  name      String   @default("Working Hours")
+  timezone  String   @default("Asia/Kolkata")
+  isDefault Boolean  @default(false) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rules         AvailabilityRule[]
+  dateOverrides DateOverride[]
+
+  @@map("availability_schedules")
+}
+
+model AvailabilityRule {
+  id         String @id @default(uuid())
+  scheduleId String @map("schedule_id")
+  dayOfWeek  Int    @map("day_of_week") // 0=Sunday, 1=Monday, ..., 6=Saturday
+  startTime  String @map("start_time")  // "09:00" format
+  endTime    String @map("end_time")    // "17:00" format
+
+  schedule AvailabilitySchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@map("availability_rules")
+}
+
+model DateOverride {
+  id            String  @id @default(uuid())
+  scheduleId    String  @map("schedule_id")
+  date          String  // "2026-04-15" format
+  startTime     String? @map("start_time")
+  endTime       String? @map("end_time")
+  isUnavailable Boolean @default(false) @map("is_unavailable")
+
+  schedule AvailabilitySchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@map("date_overrides")
+}
+
+model Booking {
+  id            String    @id @default(uuid())
+  eventTypeId   String    @map("event_type_id")
+  inviteeName   String    @map("invitee_name")
+  inviteeEmail  String    @map("invitee_email")
+  startTime     DateTime  @map("start_time")
+  endTime       DateTime  @map("end_time")
+  timezone      String    @default("Asia/Kolkata")
+  status        String    @default("confirmed") // confirmed, cancelled
+  notes         String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  cancelledAt   DateTime? @map("cancelled_at")
+
+  eventType EventType @relation(fields: [eventTypeId], references: [id], onDelete: Cascade)
+
+  @@map("bookings")
+}
