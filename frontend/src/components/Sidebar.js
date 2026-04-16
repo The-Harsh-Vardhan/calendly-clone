@@ -70,9 +70,9 @@ export default function Sidebar() {
         </nav>
 
         <div className="sidebar-user">
-          <div className="sidebar-avatar">HA</div>
+          <div className="sidebar-avatar">HV</div>
           <div className="sidebar-user-info">
-            <div className="sidebar-user-name">Harsh Agrawal</div>
+            <div className="sidebar-user-name">Harsh Vardhan</div>
             <div className="sidebar-user-email">harsh@example.com</div>
           </div>
         </div>

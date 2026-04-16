@@ -164,7 +164,7 @@ npm run dev   # Runs on http://localhost:3000
 
 ## 👤 Author
 
-**Harsh Agrawal** — [GitHub](https://github.com/The-Harsh-Vardhan)
+**Harsh Vardhan** — [GitHub](https://github.com/The-Harsh-Vardhan)
 
 ---
 
