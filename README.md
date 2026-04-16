@@ -4,8 +4,8 @@ A feature-rich scheduling platform that replicates Calendly's core functionality
 
 ## 🚀 Live Demo
 
-- **Frontend**: [Vercel Deployment URL]
-- **Backend API**: [Render Deployment URL]
+- **Frontend**: https://calendly-clone-nu-one.vercel.app
+- **Backend API**: https://calendly-clone-api.onrender.com
 
 ## 📸 Screenshots
 
