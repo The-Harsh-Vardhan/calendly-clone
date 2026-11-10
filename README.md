@@ -7,6 +7,20 @@ A feature-rich scheduling platform that replicates Calendly's core functionality
 - **Frontend**: https://calendly-clone-nu-one.vercel.app
 - **Backend API**: https://calendly-clone-api.onrender.com
 
+## 🧭 Architecture
+
+```mermaid
+flowchart LR
+    U[Host / Invitee browser] --> F[Next.js 15 frontend<br/>Vercel]
+    F -->|REST /api| B[Express.js API<br/>Render]
+    B --> P[Prisma 6 ORM]
+    P --> D[(PostgreSQL<br/>Supabase)]
+    B --> S[Slot generation +<br/>overlap check]
+    S --> P
+```
+
+The host dashboard (event types, availability, meetings) and the public booking flow share one Express API; slot availability and double-booking checks run server-side.
+
 ## 📸 Screenshots
 
 ### Event Types Dashboard
